@@ -67,7 +67,7 @@ public class RedactDrawable extends DrawableWrapper implements Redact{
     public void setRedaction(int redactFactor) {
         float factor = redactFactor/100f;
         this.currentAngle = Math.round(factor*360);
-        this.currentAlpha = Math.round(factor*255);
+        this.currentAlpha = 255 - Math.round(factor*255);
         this.currentScale = factor*5;
         invalidateSelf();
     }

@@ -22,14 +22,16 @@ public class MainActivity extends AppCompatActivity{
         setContentView(R.layout.activity_main);
         imageView = findViewById(R.id.redaction_view);
         layerDrawable = new LayerDrawable(new Drawable[0]);
-        int index;
         for(int i=0; i<100; i++) {
-            index = layerDrawable.addLayer(new RedactDrawable(this, R.drawable.blobs_01));
-            layerDrawable.setLayerGravity(index, Gravity.CENTER);
-            index = layerDrawable.addLayer(new RedactDrawable(this, R.drawable.blobs_03));
-            layerDrawable.setLayerGravity(index, Gravity.CENTER);
-            index = layerDrawable.addLayer(new RedactDrawable(this, R.drawable.blobs_05));
-            layerDrawable.setLayerGravity(index, Gravity.CENTER);
+            layerDrawable.addLayer(new RedactDrawable(this, R.drawable.blobs_01));
+            layerDrawable.addLayer(new RedactDrawable(this, R.drawable.blobs_03));
+            layerDrawable.addLayer(new RedactDrawable(this, R.drawable.blobs_05));
+            layerDrawable.addLayer(new RedactDrawable(this, R.drawable.blobs_02));
+            layerDrawable.addLayer(new RedactDrawable(this, R.drawable.blobs_04));
+            layerDrawable.addLayer(new RedactDrawable(this, R.drawable.explosion_01));
+            layerDrawable.addLayer(new RedactDrawable(this, R.drawable.explosion_03));
+            layerDrawable.addLayer(new RedactDrawable(this, R.drawable.explosion_04));
+            layerDrawable.addLayer(new RedactDrawable(this, R.drawable.explosion_08));
         }
         imageView.setImageDrawable(layerDrawable);
         int layerCount = layerDrawable.getNumberOfLayers();
