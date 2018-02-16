@@ -116,13 +116,12 @@ public class ExplosionDrawable extends DrawableWrapper implements RedactInterfac
         final int endValue = RedactValueGenerator.getRandomRange(50, 100);
         final int startValue = RedactValueGenerator.getRandomRange(0, endValue);
         final int duration = RedactValueGenerator.getRandomRange(100, mMaxAnimationTime);
-        final int rangeDelta = endValue - startValue;
         this.mCurrentAlpha = this.mInitialAlpha = RedactValueGenerator.getRandomAlphaValue(150, 255);
-        this.mCurrentScale = this.mInitialScale = RedactValueGenerator.getRandomScaleValue(1f);
+        this.mCurrentScale = this.mInitialScale = RedactValueGenerator.getRandomScaleValue(0.1f);
         this.mCurrentAngle = this.mInitialAngle = RedactValueGenerator.getRandomAngleValue(359);
-        this.mAlphaDelta = Math.round((RedactValueGenerator.getRandomAlphaValue(100, 255) - 150)/rangeDelta);
-        this.mAngleDelta = Math.round((RedactValueGenerator.getRandomAngleValue(359) - 180)/rangeDelta);
-        this.mScaleDelta = 1f/rangeDelta;
+        this.mAlphaDelta = Math.round((RedactValueGenerator.getRandomAlphaValue(100, 255) - 150)/endValue);
+        this.mAngleDelta = Math.round((RedactValueGenerator.getRandomAngleValue(359) - 180)/endValue);
+        this.mScaleDelta = (1.2f - mInitialScale)/endValue;
         this.mExplosionAnimator = ObjectAnimator.ofInt(this, "Explosion", startValue, endValue);
         this.mExplosionAnimator.setDuration(duration);
         this.mExplosionAnimator.addUpdateListener(mAnimatorUpdateListener);

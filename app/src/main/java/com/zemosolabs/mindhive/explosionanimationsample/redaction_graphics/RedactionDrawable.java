@@ -38,7 +38,7 @@ public class RedactionDrawable extends LayerDrawable implements ValueAnimator.An
 
     private Context mContext;
 
-    private final int mDefaultAnimationTime = 1000; //1 second
+    private final int mDefaultAnimationTime = 2000; //1 second
     private List<SoftReference<View>> mAnimationTargets = new ArrayList<>();
 
     //region Constructors
