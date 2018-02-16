@@ -90,16 +90,16 @@ public class RedactionDrawable extends LayerDrawable implements ValueAnimator.An
      * Generates the animation drawable with default list of drawables
      */
     public void generateDeafultLayers(){
+        this.addLayer(new ExplosionDrawable(mContext, R.drawable.explosion_01, this, mDefaultAnimationTime));
+        this.addLayer(new ExplosionDrawable(mContext, R.drawable.explosion_03, this, mDefaultAnimationTime));
+        this.addLayer(new ExplosionDrawable(mContext, R.drawable.explosion_04, this, mDefaultAnimationTime));
+        this.addLayer(new ExplosionDrawable(mContext, R.drawable.explosion_08, this, mDefaultAnimationTime));
         this.addLayer(new ExplosionDrawable(mContext, R.drawable.blobs_01, this, mDefaultAnimationTime));
         this.addLayer(new ExplosionDrawable(mContext, R.drawable.blobs_02, this, mDefaultAnimationTime));
         this.addLayer(new ExplosionDrawable(mContext, R.drawable.blobs_03, this, mDefaultAnimationTime));
         this.addLayer(new ExplosionDrawable(mContext, R.drawable.blobs_04, this, mDefaultAnimationTime));
         this.addLayer(new ExplosionDrawable(mContext, R.drawable.blobs_05, this, mDefaultAnimationTime));
         this.addLayer(new ExplosionDrawable(mContext, R.drawable.blobs_06, this, mDefaultAnimationTime));
-        this.addLayer(new ExplosionDrawable(mContext, R.drawable.explosion_01, this, mDefaultAnimationTime));
-        this.addLayer(new ExplosionDrawable(mContext, R.drawable.explosion_03, this, mDefaultAnimationTime));
-        this.addLayer(new ExplosionDrawable(mContext, R.drawable.explosion_04, this, mDefaultAnimationTime));
-        this.addLayer(new ExplosionDrawable(mContext, R.drawable.explosion_08, this, mDefaultAnimationTime));
     }
 
     public void startAnimation(){

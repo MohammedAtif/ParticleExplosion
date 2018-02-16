@@ -16,6 +16,7 @@
 
 package com.zemosolabs.mindhive.explosionanimationsample.redaction_graphics;
 
+import android.animation.Animator;
 import android.animation.ObjectAnimator;
 import android.animation.ValueAnimator;
 import android.content.Context;
@@ -32,16 +33,23 @@ import android.support.annotation.NonNull;
  * Created on 16/02/18.
  */
 
-public class ExplosionDrawable extends DrawableWrapper implements RedactInterface {
+public class ExplosionDrawable extends DrawableWrapper implements RedactInterface, Animator.AnimatorListener {
 
     private ValueAnimator.AnimatorUpdateListener mAnimatorUpdateListener;
     private ObjectAnimator mExplosionAnimator;
     private final int mMaxAnimationTime;
 
     private final Matrix mRedactMatrix = new Matrix();
+    private int mAngleDelta;
+    private int mAlphaDelta;
     private int mCurrentAngle;
-    private float mCurrentScale;
     private int mCurrentAlpha;
+    private float mCurrentScale;
+    private float mScaleDelta;
+
+    private int mInitialAngle;
+    private int mInitialAlpha;
+    private float mInitialScale;
 
     //region Constructors
 
@@ -50,11 +58,18 @@ public class ExplosionDrawable extends DrawableWrapper implements RedactInterfac
      * @param context Context of the Activity or app
      * @param resId resource Id of the drawable file to be loaded
      * @param animatorUpdateListener Listener to listen for animation changes
+     * @param maxAnimationTime Maximum animation time allowed for this animation
      */
     public ExplosionDrawable(@NonNull Context context, @DrawableRes int resId, @NonNull ValueAnimator.AnimatorUpdateListener animatorUpdateListener, int maxAnimationTime) {
         this(context.getResources().getDrawable(resId, context.getTheme()), animatorUpdateListener, maxAnimationTime);
     }
 
+    /**
+     * Creates a new wrapper around the specified drawable
+     * @param drawable Drawable to be added to the Explosion Wrapper
+     * @param animatorUpdateListener Listener to listen for animation changes
+     * @param maxAnimationTime Maximum animation time allowed for this animation
+     */
     public ExplosionDrawable(@NonNull Drawable drawable, @NonNull ValueAnimator.AnimatorUpdateListener animatorUpdateListener, int maxAnimationTime){
         super(drawable);
         this.mAnimatorUpdateListener = animatorUpdateListener;
@@ -94,17 +109,22 @@ public class ExplosionDrawable extends DrawableWrapper implements RedactInterfac
 
     //region Private Methods
 
+    /**
+     * Generates the initial values for the Exploder
+     */
     private void initializeExploder(){
-        this.mCurrentAlpha = 125;
-        this.mCurrentScale = 0.5f;
-        this.mCurrentAngle = 90;
-        final int startValue = 0;
-        final int endValue = 100;
-        final int duration = 1000;
+        final int endValue = RedactValueGenerator.getRandomRange(50, 100);
+        final int startValue = RedactValueGenerator.getRandomRange(0, endValue);
+        final int duration = RedactValueGenerator.getRandomRange(100, mMaxAnimationTime);
+        final int rangeDelta = endValue - startValue;
+        this.mCurrentAlpha = this.mInitialAlpha = RedactValueGenerator.getRandomAlphaValue(150, 255);
+        this.mCurrentScale = this.mInitialScale = RedactValueGenerator.getRandomScaleValue(1f);
+        this.mCurrentAngle = this.mInitialAngle = RedactValueGenerator.getRandomAngleValue(359);
+        this.mAlphaDelta = Math.round((RedactValueGenerator.getRandomAlphaValue(100, 255) - 150)/rangeDelta);
+        this.mAngleDelta = Math.round((RedactValueGenerator.getRandomAngleValue(359) - 180)/rangeDelta);
+        this.mScaleDelta = 1f/rangeDelta;
         this.mExplosionAnimator = ObjectAnimator.ofInt(this, "Explosion", startValue, endValue);
         this.mExplosionAnimator.setDuration(duration);
-        this.mExplosionAnimator.setRepeatMode(ValueAnimator.RESTART);
-        this.mExplosionAnimator.setRepeatCount(ValueAnimator.INFINITE);
         this.mExplosionAnimator.addUpdateListener(mAnimatorUpdateListener);
     }
 
@@ -114,21 +134,42 @@ public class ExplosionDrawable extends DrawableWrapper implements RedactInterfac
 
     @Override
     public void setExplosion(int explosionFactor) {
-        float factor = explosionFactor/100f;
-        this.mCurrentAngle = Math.round(factor*360);
-        this.mCurrentAlpha = 255 - Math.round(factor*255);
-        this.mCurrentScale = factor + 0.5f;
+        this.mCurrentAngle = this.mInitialAngle + this.mAngleDelta * explosionFactor;
+        this.mCurrentAlpha = this.mInitialAlpha + this.mAlphaDelta * explosionFactor;
+        this.mCurrentScale = this.mInitialScale + this.mScaleDelta * explosionFactor;
         invalidateSelf();
     }
 
     @Override
     public void startExplosion() {
+        this.mExplosionAnimator.addListener(this);
         this.mExplosionAnimator.start();
     }
 
     @Override
     public void endExplosion() {
+        this.mExplosionAnimator.removeListener(this);
         this.mExplosionAnimator.end();
+    }
+
+    @Override
+    public void onAnimationStart(Animator animation) {
+
+    }
+
+    @Override
+    public void onAnimationEnd(Animator animation) {
+        initializeExploder();
+        startExplosion();
+    }
+
+    @Override
+    public void onAnimationCancel(Animator animation) {
+
+    }
+
+    @Override
+    public void onAnimationRepeat(Animator animation) {
     }
 
     //endregion

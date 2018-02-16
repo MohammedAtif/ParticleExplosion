@@ -24,7 +24,22 @@ import android.support.annotation.IntRange;
  */
 
 public interface RedactInterface {
+    /**
+     * <p>Set the redaction value for the animation at given instance of time.</p>
+     * <p>Must always range between 0 to 100</p>
+     * <p></p>
+     * <p>Mostly used by the {@link android.animation.ObjectAnimator} to update the animation</p>
+     * @param redactFactor time value for the redaction
+     */
     void setExplosion(@IntRange(from = 0, to = 100) int redactFactor);
+
+    /**
+     * Starts the explosion animation for the drawable
+     */
     void startExplosion();
+
+    /**
+     * Stops the explosion animation for the drawable
+     */
     void endExplosion();
 }
