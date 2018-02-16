@@ -34,7 +34,7 @@ import java.util.List;
  *         Created on 16/02/18.
  */
 
-public class RedactionDrawable extends LayerDrawable implements ValueAnimator.AnimatorUpdateListener{
+public class RedactionDrawable extends LayerDrawable implements ValueAnimator.AnimatorUpdateListener, DrawbackCallbackInterface{
 
     private Context mContext;
 
@@ -89,7 +89,7 @@ public class RedactionDrawable extends LayerDrawable implements ValueAnimator.An
     /**
      * Generates the animation drawable with default list of drawables
      */
-    public void generateDeafultLayers(){
+    public void generateDefaultLayers(){
         this.addLayer(new ExplosionDrawable(mContext, R.drawable.explosion_01, this, mDefaultAnimationTime));
         this.addLayer(new ExplosionDrawable(mContext, R.drawable.explosion_03, this, mDefaultAnimationTime));
         this.addLayer(new ExplosionDrawable(mContext, R.drawable.explosion_04, this, mDefaultAnimationTime));
@@ -123,7 +123,7 @@ public class RedactionDrawable extends LayerDrawable implements ValueAnimator.An
      * @throws IllegalStateException Throws IllegalStateException if the View is already added as listener
      * @param view View in which the animation has to be displayed
      */
-    public void addAnimationtarget(@NonNull View view){
+    public void addAnimationTarget(@NonNull View view){
         for(SoftReference<View> target : mAnimationTargets){
             if(view.equals(target.get())){
                 throw new IllegalStateException("Current View is already attached to the drawable");
@@ -156,6 +156,11 @@ public class RedactionDrawable extends LayerDrawable implements ValueAnimator.An
         for(SoftReference<View> target : mAnimationTargets){
             target.get().invalidate();
         }
+    }
+
+    @Override
+    public void moveToTop(ExplosionDrawable explosionDrawable) {
+
     }
 
     //endregion

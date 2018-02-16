@@ -1,12 +1,7 @@
 package com.zemosolabs.mindhive.explosionanimationsample;
 
-import android.animation.ObjectAnimator;
-import android.animation.ValueAnimator;
-import android.graphics.drawable.Drawable;
-import android.graphics.drawable.LayerDrawable;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.view.Gravity;
 import android.widget.ImageView;
 
 import com.zemosolabs.mindhive.explosionanimationsample.redaction_graphics.RedactionDrawable;
@@ -24,8 +19,8 @@ public class MainActivity extends AppCompatActivity{
         imageView = findViewById(R.id.redaction_view);
         layerDrawable = new RedactionDrawable(this);
         imageView.setImageDrawable(layerDrawable);
-        layerDrawable.generateDeafultLayers();
-        layerDrawable.addAnimationtarget(imageView);
+        layerDrawable.generateDefaultLayers();
+        layerDrawable.addAnimationTarget(imageView);
     }
 
     @Override

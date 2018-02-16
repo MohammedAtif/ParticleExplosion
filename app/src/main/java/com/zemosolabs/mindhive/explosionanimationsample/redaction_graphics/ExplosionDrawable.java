@@ -95,9 +95,10 @@ public class ExplosionDrawable extends DrawableWrapper implements RedactInterfac
         float pivotY = py + bounds.top;
 
         final int saveCount = canvas.save();
+        float scaleFactor = mCurrentScale * canvas.getWidth() / width;
         mRedactMatrix.setRotate(mCurrentAngle, pivotX, pivotY);
-        mRedactMatrix.postScale(mCurrentScale, mCurrentScale);
-        mRedactMatrix.postTranslate(canvas.getWidth()/2 - pivotX*mCurrentScale, canvas.getHeight()/2 - pivotY*mCurrentScale);
+        mRedactMatrix.postScale(scaleFactor, scaleFactor);
+        mRedactMatrix.postTranslate(canvas.getWidth()/2 - pivotX*scaleFactor, canvas.getHeight()/2 - pivotY*scaleFactor);
         canvas.setMatrix(mRedactMatrix);
         setAlpha(mCurrentAlpha);
         d.draw(canvas);
@@ -121,7 +122,7 @@ public class ExplosionDrawable extends DrawableWrapper implements RedactInterfac
         this.mCurrentAngle = this.mInitialAngle = RedactValueGenerator.getRandomAngleValue(359);
         this.mAlphaDelta = Math.round((RedactValueGenerator.getRandomAlphaValue(100, 255) - 150)/endValue);
         this.mAngleDelta = Math.round((RedactValueGenerator.getRandomAngleValue(359) - 180)/endValue);
-        this.mScaleDelta = (1.2f - mInitialScale)/endValue;
+        this.mScaleDelta = (1f - mInitialScale)/endValue;
         this.mExplosionAnimator = ObjectAnimator.ofInt(this, "Explosion", startValue, endValue);
         this.mExplosionAnimator.setDuration(duration);
         this.mExplosionAnimator.addUpdateListener(mAnimatorUpdateListener);
