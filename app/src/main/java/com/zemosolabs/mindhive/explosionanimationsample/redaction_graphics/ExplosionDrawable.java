@@ -100,7 +100,7 @@ public class ExplosionDrawable extends DrawableWrapper implements RedactInterfac
         mRedactMatrix.postScale(scaleFactor, scaleFactor);
         mRedactMatrix.postTranslate(canvas.getWidth()/2 - pivotX*scaleFactor, canvas.getHeight()/2 - pivotY*scaleFactor);
         canvas.setMatrix(mRedactMatrix);
-        setAlpha(mCurrentAlpha);
+        d.setAlpha(mCurrentAlpha);
         d.draw(canvas);
         canvas.restoreToCount(saveCount);
     }
@@ -120,7 +120,7 @@ public class ExplosionDrawable extends DrawableWrapper implements RedactInterfac
         this.mCurrentAlpha = this.mInitialAlpha = RedactValueGenerator.getRandomAlphaValue(150, 255);
         this.mCurrentScale = this.mInitialScale = RedactValueGenerator.getRandomScaleValue(0.1f);
         this.mCurrentAngle = this.mInitialAngle = RedactValueGenerator.getRandomAngleValue(359);
-        this.mAlphaDelta = Math.round((RedactValueGenerator.getRandomAlphaValue(100, 255) - 150)/endValue);
+        this.mAlphaDelta = Math.round((RedactValueGenerator.getRandomAlphaValue(10, 255) - 150)/endValue);
         this.mAngleDelta = Math.round((RedactValueGenerator.getRandomAngleValue(359) - 180)/endValue);
         this.mScaleDelta = (1f - mInitialScale)/endValue;
         this.mExplosionAnimator = ObjectAnimator.ofInt(this, "Explosion", startValue, endValue);

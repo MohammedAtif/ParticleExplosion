@@ -18,7 +18,7 @@ public class RedactValueGenerator {
         return min + randomGenerator.nextInt(max-min);
     }
 
-    public static int getRandomAlphaValue(@IntRange(from = 100, to = 255) int min, @IntRange(from = 100, to = 255) int max){
+    public static int getRandomAlphaValue(@IntRange(from = 10, to = 255) int min, @IntRange(from = 100, to = 255) int max){
         return min + randomGenerator.nextInt(max - min);
     }
 
