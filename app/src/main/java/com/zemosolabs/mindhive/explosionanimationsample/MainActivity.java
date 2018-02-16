@@ -9,9 +9,11 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.Gravity;
 import android.widget.ImageView;
 
+import com.zemosolabs.mindhive.explosionanimationsample.redaction_graphics.RedactionDrawable;
+
 public class MainActivity extends AppCompatActivity{
 
-    private LayerDrawable layerDrawable;
+    private RedactionDrawable layerDrawable;
     private ImageView imageView;
     private final String TAG = "MainActivity";
 
@@ -20,43 +22,27 @@ public class MainActivity extends AppCompatActivity{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         imageView = findViewById(R.id.redaction_view);
-        layerDrawable = new LayerDrawable(new Drawable[0]);
-        for(int i=0; i<100; i++) {
-            layerDrawable.addLayer(new RedactInterfaceDrawable(this, R.drawable.blobs_01));
-            layerDrawable.addLayer(new RedactInterfaceDrawable(this, R.drawable.blobs_03));
-            layerDrawable.addLayer(new RedactInterfaceDrawable(this, R.drawable.blobs_05));
-            layerDrawable.addLayer(new RedactInterfaceDrawable(this, R.drawable.blobs_02));
-            layerDrawable.addLayer(new RedactInterfaceDrawable(this, R.drawable.blobs_04));
-            layerDrawable.addLayer(new RedactInterfaceDrawable(this, R.drawable.explosion_01));
-            layerDrawable.addLayer(new RedactInterfaceDrawable(this, R.drawable.explosion_03));
-            layerDrawable.addLayer(new RedactInterfaceDrawable(this, R.drawable.explosion_04));
-            layerDrawable.addLayer(new RedactInterfaceDrawable(this, R.drawable.explosion_08));
-        }
+        layerDrawable = new RedactionDrawable(this);
         imageView.setImageDrawable(layerDrawable);
-        int layerCount = layerDrawable.getNumberOfLayers();
-        for(int i=0; i<layerCount; i++){
-            RedactInterfaceDrawable drawable = (RedactInterfaceDrawable) layerDrawable.getDrawable(i);
-            int start = i%2 == 0 ? 0 : 100;
-            int end = i%2 == 0 ? 100 : 0;
-            ObjectAnimator animator = ObjectAnimator.ofInt(drawable, "Redaction", start, end);
-            animator.setDuration(1000);
-            animator.setRepeatCount(ValueAnimator.INFINITE);
-            animator.setRepeatMode(ValueAnimator.REVERSE);
-            animator.addUpdateListener(animatorUpdateListener);
-            layerDrawable.setLayerGravity(i, Gravity.CENTER);
-            animator.start();
-        }
+        layerDrawable.generateDeafultLayers();
+        layerDrawable.addAnimationtarget(imageView);
     }
 
     @Override
     protected void onResume() {
         super.onResume();
+        layerDrawable.startAnimation();
     }
 
-    private ValueAnimator.AnimatorUpdateListener animatorUpdateListener = new ValueAnimator.AnimatorUpdateListener() {
-        @Override
-        public void onAnimationUpdate(ValueAnimator animation) {
-            imageView.invalidate();
-        }
-    };
+    @Override
+    protected void onPause() {
+        layerDrawable.endAnimation();
+        super.onPause();
+    }
+
+    @Override
+    protected void onDestroy() {
+        layerDrawable.removeAnimationTarget(imageView);
+        super.onDestroy();
+    }
 }

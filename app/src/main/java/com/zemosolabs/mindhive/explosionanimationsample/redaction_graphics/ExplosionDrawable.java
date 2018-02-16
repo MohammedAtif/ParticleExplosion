@@ -20,6 +20,8 @@ import android.animation.ObjectAnimator;
 import android.animation.ValueAnimator;
 import android.content.Context;
 import android.graphics.Canvas;
+import android.graphics.Matrix;
+import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.DrawableWrapper;
 import android.support.annotation.DrawableRes;
@@ -35,6 +37,8 @@ public class ExplosionDrawable extends DrawableWrapper implements RedactInterfac
     private ValueAnimator.AnimatorUpdateListener mAnimatorUpdateListener;
     private ObjectAnimator mExplosionAnimator;
     private final int mMaxAnimationTime;
+
+    private final Matrix mRedactMatrix = new Matrix();
     private int mCurrentAngle;
     private float mCurrentScale;
     private int mCurrentAlpha;
@@ -64,7 +68,25 @@ public class ExplosionDrawable extends DrawableWrapper implements RedactInterfac
 
     @Override
     public void draw(@NonNull Canvas canvas) {
-        super.draw(canvas);
+        final Drawable d = getDrawable();
+        final Rect bounds = d.getBounds();
+
+        final int width = bounds.right - bounds.left;
+        final int height = bounds.bottom - bounds.top;
+        final float px = width * 0.5f;
+        final float py = height * 0.5f;
+
+        float pivotX = px + bounds.left;
+        float pivotY = py + bounds.top;
+
+        final int saveCount = canvas.save();
+        mRedactMatrix.setRotate(mCurrentAngle, pivotX, pivotY);
+        mRedactMatrix.postScale(mCurrentScale, mCurrentScale);
+        mRedactMatrix.postTranslate(canvas.getWidth()/2 - pivotX*mCurrentScale, canvas.getHeight()/2 - pivotY*mCurrentScale);
+        canvas.setMatrix(mRedactMatrix);
+        setAlpha(mCurrentAlpha);
+        d.draw(canvas);
+        canvas.restoreToCount(saveCount);
     }
 
 
@@ -79,12 +101,11 @@ public class ExplosionDrawable extends DrawableWrapper implements RedactInterfac
         final int startValue = 0;
         final int endValue = 100;
         final int duration = 1000;
-        this.mExplosionAnimator = ObjectAnimator.ofInt(this, "Redaction", startValue, endValue);
+        this.mExplosionAnimator = ObjectAnimator.ofInt(this, "Explosion", startValue, endValue);
         this.mExplosionAnimator.setDuration(duration);
         this.mExplosionAnimator.setRepeatMode(ValueAnimator.RESTART);
         this.mExplosionAnimator.setRepeatCount(ValueAnimator.INFINITE);
         this.mExplosionAnimator.addUpdateListener(mAnimatorUpdateListener);
-        this.mExplosionAnimator.start();
     }
 
     //endregion
@@ -92,8 +113,22 @@ public class ExplosionDrawable extends DrawableWrapper implements RedactInterfac
     //region Interface Methods
 
     @Override
-    public void setRedaction(int redactFactor) {
+    public void setExplosion(int explosionFactor) {
+        float factor = explosionFactor/100f;
+        this.mCurrentAngle = Math.round(factor*360);
+        this.mCurrentAlpha = 255 - Math.round(factor*255);
+        this.mCurrentScale = factor + 0.5f;
+        invalidateSelf();
+    }
 
+    @Override
+    public void startExplosion() {
+        this.mExplosionAnimator.start();
+    }
+
+    @Override
+    public void endExplosion() {
+        this.mExplosionAnimator.end();
     }
 
     //endregion

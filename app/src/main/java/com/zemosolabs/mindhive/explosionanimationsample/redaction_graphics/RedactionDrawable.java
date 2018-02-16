@@ -102,6 +102,22 @@ public class RedactionDrawable extends LayerDrawable implements ValueAnimator.An
         this.addLayer(new ExplosionDrawable(mContext, R.drawable.explosion_08, this, mDefaultAnimationTime));
     }
 
+    public void startAnimation(){
+        int size = getNumberOfLayers();
+        for(int i=0; i<size; i++){
+            ExplosionDrawable explosionDrawable = (ExplosionDrawable) getDrawable(i);
+            explosionDrawable.startExplosion();
+        }
+    }
+
+    public void endAnimation(){
+        int size = getNumberOfLayers();
+        for(int i=0; i<size; i++){
+            ExplosionDrawable explosionDrawable = (ExplosionDrawable) getDrawable(i);
+            explosionDrawable.endExplosion();
+        }
+    }
+
     /**
      * Adds the view to the drawable
      * @throws IllegalStateException Throws IllegalStateException if the View is already added as listener

@@ -24,5 +24,7 @@ import android.support.annotation.IntRange;
  */
 
 public interface RedactInterface {
-    void setRedaction(@IntRange(from = 0, to = 100) int redactFactor);
+    void setExplosion(@IntRange(from = 0, to = 100) int redactFactor);
+    void startExplosion();
+    void endExplosion();
 }
