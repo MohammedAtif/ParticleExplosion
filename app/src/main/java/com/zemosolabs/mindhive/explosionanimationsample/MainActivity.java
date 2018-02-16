@@ -22,20 +22,20 @@ public class MainActivity extends AppCompatActivity{
         imageView = findViewById(R.id.redaction_view);
         layerDrawable = new LayerDrawable(new Drawable[0]);
         for(int i=0; i<100; i++) {
-            layerDrawable.addLayer(new RedactDrawable(this, R.drawable.blobs_01));
-            layerDrawable.addLayer(new RedactDrawable(this, R.drawable.blobs_03));
-            layerDrawable.addLayer(new RedactDrawable(this, R.drawable.blobs_05));
-            layerDrawable.addLayer(new RedactDrawable(this, R.drawable.blobs_02));
-            layerDrawable.addLayer(new RedactDrawable(this, R.drawable.blobs_04));
-            layerDrawable.addLayer(new RedactDrawable(this, R.drawable.explosion_01));
-            layerDrawable.addLayer(new RedactDrawable(this, R.drawable.explosion_03));
-            layerDrawable.addLayer(new RedactDrawable(this, R.drawable.explosion_04));
-            layerDrawable.addLayer(new RedactDrawable(this, R.drawable.explosion_08));
+            layerDrawable.addLayer(new RedactInterfaceDrawable(this, R.drawable.blobs_01));
+            layerDrawable.addLayer(new RedactInterfaceDrawable(this, R.drawable.blobs_03));
+            layerDrawable.addLayer(new RedactInterfaceDrawable(this, R.drawable.blobs_05));
+            layerDrawable.addLayer(new RedactInterfaceDrawable(this, R.drawable.blobs_02));
+            layerDrawable.addLayer(new RedactInterfaceDrawable(this, R.drawable.blobs_04));
+            layerDrawable.addLayer(new RedactInterfaceDrawable(this, R.drawable.explosion_01));
+            layerDrawable.addLayer(new RedactInterfaceDrawable(this, R.drawable.explosion_03));
+            layerDrawable.addLayer(new RedactInterfaceDrawable(this, R.drawable.explosion_04));
+            layerDrawable.addLayer(new RedactInterfaceDrawable(this, R.drawable.explosion_08));
         }
         imageView.setImageDrawable(layerDrawable);
         int layerCount = layerDrawable.getNumberOfLayers();
         for(int i=0; i<layerCount; i++){
-            RedactDrawable drawable = (RedactDrawable) layerDrawable.getDrawable(i);
+            RedactInterfaceDrawable drawable = (RedactInterfaceDrawable) layerDrawable.getDrawable(i);
             int start = i%2 == 0 ? 0 : 100;
             int end = i%2 == 0 ? 100 : 0;
             ObjectAnimator animator = ObjectAnimator.ofInt(drawable, "Redaction", start, end);

@@ -24,19 +24,21 @@ import android.graphics.drawable.Drawable;
 import android.graphics.drawable.DrawableWrapper;
 import android.support.annotation.NonNull;
 
+import com.zemosolabs.mindhive.explosionanimationsample.redaction_graphics.RedactInterface;
+
 /**
  * @author atif
  * Created on 15/02/18.
  */
 
-public class RedactDrawable extends DrawableWrapper implements Redact{
+public class RedactInterfaceDrawable extends DrawableWrapper implements RedactInterface {
 
     private int currentAngle;
     private int currentAlpha;
     private float currentScale;
     private Matrix redactMatrix = new Matrix();
 
-    public RedactDrawable(Context context, int resId) {
+    public RedactInterfaceDrawable(Context context, int resId) {
         super(context.getResources().getDrawable(resId, context.getTheme()));
     }
 
