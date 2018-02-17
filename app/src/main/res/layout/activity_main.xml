@@ -15,12 +15,16 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scaleType="centerCrop"
+            android:src="@drawable/emma"/>
 
         <ImageView
             android:id="@+id/redaction_view"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="@drawable/emma"/>
+            android:layout_height="match_parent" />
     </com.zemosolabs.mindhive.explosionanimationsample.CircularFrameLayout>
 
 </android.support.constraint.ConstraintLayout>
