@@ -40,7 +40,7 @@ public class RedactionDrawable extends LayerDrawable implements ValueAnimator.An
 
     private int layerCount = 0;
 
-    private final int mDefaultAnimationCount = 50; //number of steps
+    private final static int DEFAULT_ANIMATION_COUNT = 50; //number of steps
     private List<RedactValue> redactValues = new ArrayList<>();
     private List<SoftReference<View>> mAnimationTargets = new ArrayList<>();
 
@@ -72,7 +72,7 @@ public class RedactionDrawable extends LayerDrawable implements ValueAnimator.An
 
     @Override
     public int addLayer(Drawable drawable) {
-        return addLayer(drawable, mDefaultAnimationCount);
+        return addLayer(drawable, DEFAULT_ANIMATION_COUNT);
     }
 
 
