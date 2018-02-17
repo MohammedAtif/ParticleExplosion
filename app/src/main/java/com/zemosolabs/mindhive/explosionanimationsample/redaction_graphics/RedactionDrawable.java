@@ -34,11 +34,14 @@ import java.util.List;
  *         Created on 16/02/18.
  */
 
-public class RedactionDrawable extends LayerDrawable implements ValueAnimator.AnimatorUpdateListener, DrawbackCallbackInterface{
+public class RedactionDrawable extends LayerDrawable implements ValueAnimator.AnimatorUpdateListener, DrawableCallbackInterface {
 
     private Context mContext;
 
-    private final int mDefaultAnimationTime = 2000; //1 second
+    private int layerCount = 0;
+
+    private final int mDefaultAnimationCount = 50; //number of steps
+    private List<RedactValue> redactValues = new ArrayList<>();
     private List<SoftReference<View>> mAnimationTargets = new ArrayList<>();
 
     //region Constructors
@@ -69,15 +72,16 @@ public class RedactionDrawable extends LayerDrawable implements ValueAnimator.An
 
     @Override
     public int addLayer(Drawable drawable) {
-        return addLayer(drawable, mDefaultAnimationTime);
+        return addLayer(drawable, mDefaultAnimationCount);
     }
 
 
     public int addLayer(Drawable drawable, int maxAnimationTime){
+        layerCount++;
         if(drawable instanceof ExplosionDrawable) {
             return super.addLayer(drawable);
         }else{
-            return super.addLayer(new ExplosionDrawable(drawable, this, maxAnimationTime));
+            return super.addLayer(new ExplosionDrawable(drawable, this, this, maxAnimationTime));
         }
     }
 
@@ -90,16 +94,12 @@ public class RedactionDrawable extends LayerDrawable implements ValueAnimator.An
      * Generates the animation drawable with default list of drawables
      */
     public void generateDefaultLayers(){
-        this.addLayer(new ExplosionDrawable(mContext, R.drawable.explosion_01, this, mDefaultAnimationTime));
-        this.addLayer(new ExplosionDrawable(mContext, R.drawable.explosion_03, this, mDefaultAnimationTime));
-        this.addLayer(new ExplosionDrawable(mContext, R.drawable.explosion_04, this, mDefaultAnimationTime));
-        this.addLayer(new ExplosionDrawable(mContext, R.drawable.explosion_08, this, mDefaultAnimationTime));
-        this.addLayer(new ExplosionDrawable(mContext, R.drawable.blobs_01, this, mDefaultAnimationTime));
-        this.addLayer(new ExplosionDrawable(mContext, R.drawable.blobs_02, this, mDefaultAnimationTime));
-        this.addLayer(new ExplosionDrawable(mContext, R.drawable.blobs_03, this, mDefaultAnimationTime));
-        this.addLayer(new ExplosionDrawable(mContext, R.drawable.blobs_04, this, mDefaultAnimationTime));
-        this.addLayer(new ExplosionDrawable(mContext, R.drawable.blobs_05, this, mDefaultAnimationTime));
-        this.addLayer(new ExplosionDrawable(mContext, R.drawable.blobs_06, this, mDefaultAnimationTime));
+        generateDefaultArray();
+        for(RedactValue redactValue : redactValues){
+            for(int i=0; i<redactValue.getCount(); i++){
+                this.addLayer(new ExplosionDrawable(mContext, redactValue.getResId(), this, this, redactValue.getSteps()));
+            }
+        }
     }
 
     public void startAnimation(){
@@ -111,8 +111,7 @@ public class RedactionDrawable extends LayerDrawable implements ValueAnimator.An
     }
 
     public void endAnimation(){
-        int size = getNumberOfLayers();
-        for(int i=0; i<size; i++){
+        for(int i=0; i<layerCount; i++){
             ExplosionDrawable explosionDrawable = (ExplosionDrawable) getDrawable(i);
             explosionDrawable.endExplosion();
         }
@@ -145,6 +144,24 @@ public class RedactionDrawable extends LayerDrawable implements ValueAnimator.An
                 return;
             }
         }
+    }
+
+    //endregion
+
+    //region Private Methods
+
+    private void generateDefaultArray(){
+        redactValues.clear();
+        redactValues.add(new RedactValue(3, 100, R.drawable.explosion_01));
+        redactValues.add(new RedactValue(1, 50, R.drawable.explosion_03));
+        redactValues.add(new RedactValue(1, 75, R.drawable.explosion_04));
+        redactValues.add(new RedactValue(2, 20, R.drawable.explosion_08));
+        redactValues.add(new RedactValue(2, 40, R.drawable.blobs_01));
+        redactValues.add(new RedactValue(1, 40, R.drawable.blobs_02));
+        redactValues.add(new RedactValue(1, 50, R.drawable.blobs_03));
+        redactValues.add(new RedactValue(1, 30, R.drawable.blobs_04));
+        redactValues.add(new RedactValue(3, 70, R.drawable.blobs_05));
+        redactValues.add(new RedactValue(1, 40, R.drawable.blobs_06));
     }
 
     //endregion

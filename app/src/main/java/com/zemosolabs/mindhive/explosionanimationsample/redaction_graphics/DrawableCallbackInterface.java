@@ -5,6 +5,6 @@ package com.zemosolabs.mindhive.explosionanimationsample.redaction_graphics;
  * Created on 16/02/18.
  */
 
-public interface DrawbackCallbackInterface {
+public interface DrawableCallbackInterface {
     void moveToTop(ExplosionDrawable explosionDrawable);
 }
