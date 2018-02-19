@@ -24,6 +24,10 @@ import android.support.annotation.IntRange;
  */
 
 public interface RedactInterface {
+
+    void setLayerIndex(int layerIndex);
+    int getLayerIndex();
+
     /**
      * <p>Set the redaction value for the animation at given instance of time.</p>
      * <p>Must always range between 0 to 100</p>

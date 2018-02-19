@@ -43,6 +43,8 @@ public class ExplosionDrawable extends DrawableWrapper implements RedactInterfac
     private ObjectAnimator mExplosionAnimator;
     private final Matrix mRedactMatrix = new Matrix();
 
+    private int mLayerIndex = -1;
+
     private int mIndex;
     private int mCount;
     private final int mMaxAnimationCount;
@@ -153,6 +155,16 @@ public class ExplosionDrawable extends DrawableWrapper implements RedactInterfac
     //region Interface Methods
 
     @Override
+    public void setLayerIndex(int layerIndex) {
+        this.mLayerIndex = layerIndex;
+    }
+
+    @Override
+    public int getLayerIndex() {
+        return mLayerIndex;
+    }
+
+    @Override
     public void setExplosion(int explosionFactor) {
         final float factor = explosionFactor/100f;
         mCurrentScale = mInitialScale + mScaleDelta * factor;
@@ -166,6 +178,7 @@ public class ExplosionDrawable extends DrawableWrapper implements RedactInterfac
         initializeAnimator();
         if(mIndex >= mCount){
             initializeTransform();
+            drawableCallbackInterface.moveToTop(this);
         }
         applyTransform();
     }

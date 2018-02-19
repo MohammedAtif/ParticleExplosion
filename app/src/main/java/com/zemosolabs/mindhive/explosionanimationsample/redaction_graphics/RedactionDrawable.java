@@ -21,6 +21,7 @@ import android.content.Context;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.LayerDrawable;
 import android.support.annotation.NonNull;
+import android.util.Log;
 import android.view.View;
 
 import com.zemosolabs.mindhive.explosionanimationsample.R;
@@ -35,6 +36,8 @@ import java.util.List;
  */
 
 public class RedactionDrawable extends LayerDrawable implements ValueAnimator.AnimatorUpdateListener, DrawableCallbackInterface {
+
+    private final static String TAG = "RedactionDrawable";
 
     private Context mContext;
 
@@ -78,11 +81,17 @@ public class RedactionDrawable extends LayerDrawable implements ValueAnimator.An
 
     public int addLayer(Drawable drawable, int maxAnimationTime){
         layerCount++;
+        Log.d(TAG, "Total layer count is : "+layerCount);
+        int layerIndex = -1;
         if(drawable instanceof ExplosionDrawable) {
-            return super.addLayer(drawable);
+            layerIndex = super.addLayer(drawable);
+            ((ExplosionDrawable)drawable).setLayerIndex(layerIndex);
         }else{
-            return super.addLayer(new ExplosionDrawable(drawable, this, this, maxAnimationTime));
+            ExplosionDrawable explosionDrawable = new ExplosionDrawable(drawable, this, this, maxAnimationTime);
+            layerIndex =  super.addLayer(explosionDrawable);
+            explosionDrawable.setLayerIndex(layerIndex);
         }
+        return layerIndex;
     }
 
 
@@ -106,14 +115,18 @@ public class RedactionDrawable extends LayerDrawable implements ValueAnimator.An
         int size = getNumberOfLayers();
         for(int i=0; i<size; i++){
             ExplosionDrawable explosionDrawable = (ExplosionDrawable) getDrawable(i);
-            explosionDrawable.startExplosion();
+            if(explosionDrawable != null) {
+                explosionDrawable.startExplosion();
+            }
         }
     }
 
     public void endAnimation(){
         for(int i=0; i<layerCount; i++){
             ExplosionDrawable explosionDrawable = (ExplosionDrawable) getDrawable(i);
-            explosionDrawable.endExplosion();
+            if(explosionDrawable != null) {
+                explosionDrawable.endExplosion();
+            }
         }
     }
 
@@ -155,11 +168,11 @@ public class RedactionDrawable extends LayerDrawable implements ValueAnimator.An
         redactValues.add(new RedactValue(3, 100, R.drawable.explosion_01));
         redactValues.add(new RedactValue(1, 50, R.drawable.explosion_03));
         redactValues.add(new RedactValue(1, 75, R.drawable.explosion_04));
-        redactValues.add(new RedactValue(2, 20, R.drawable.explosion_08));
-        redactValues.add(new RedactValue(2, 40, R.drawable.blobs_01));
+        redactValues.add(new RedactValue(2, 40, R.drawable.explosion_08));
+        redactValues.add(new RedactValue(2, 70, R.drawable.blobs_01));
         redactValues.add(new RedactValue(1, 40, R.drawable.blobs_02));
-        redactValues.add(new RedactValue(1, 50, R.drawable.blobs_03));
-        redactValues.add(new RedactValue(1, 30, R.drawable.blobs_04));
+        redactValues.add(new RedactValue(1, 100, R.drawable.blobs_03));
+        redactValues.add(new RedactValue(1, 100, R.drawable.blobs_04));
         redactValues.add(new RedactValue(3, 70, R.drawable.blobs_05));
         redactValues.add(new RedactValue(1, 40, R.drawable.blobs_06));
     }
@@ -177,7 +190,8 @@ public class RedactionDrawable extends LayerDrawable implements ValueAnimator.An
 
     @Override
     public void moveToTop(ExplosionDrawable explosionDrawable) {
-
+        this.setDrawable(explosionDrawable.getLayerIndex(), null);
+        this.addLayer(explosionDrawable);
     }
 
     //endregion
