@@ -185,8 +185,10 @@ public class ExplosionDrawable extends DrawableWrapper implements RedactInterfac
 
     @Override
     public void endExplosion() {
-        this.mExplosionAnimator.removeListener(this);
-        this.mExplosionAnimator.end();
+        if(mExplosionAnimator != null) {
+            this.mExplosionAnimator.removeListener(this);
+            this.mExplosionAnimator.end();
+        }
     }
 
     @Override
